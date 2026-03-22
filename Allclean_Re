@@ -1,0 +1,36 @@
+#!/bin/sh
+cd "${0%/*}" || exit
+. ${WM_PROJECT_DIR:?}/bin/tools/CleanFunctions 
+
+for i in 10 50 100 500
+do
+    CASE_DIR="Re_$i"
+    echo "==========================="
+    echo "Clear case in $CASE_DIR"
+    echo "==========================="
+
+    if [ ! -d "$CASE_DIR" ]; then
+        echo "Warning: $CASE_DIR does not exist, skipping."
+        continue
+    fi
+
+    cd "$CASE_DIR" || continue
+
+    rm -rf [1-9]*
+    rm -rf 0.*
+    rm -rf constant/vorticity
+    rm -rf constant/polyMesh postProcessing processor*
+    rm -rf constant/extendedFeatureEdgeMesh
+    rm -rf constant/polyMesh
+    rm -rf log.*
+    rm -r pro*
+    rm -r cylinder.foam
+    rm -r lid.foam
+    rm -r poiseuille_2D.foam
+    rm -r logs
+
+
+    cd ..
+done
+
+#------------------------------------------------------------------------------

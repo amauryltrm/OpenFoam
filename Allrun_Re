@@ -1,0 +1,27 @@
+#!/bin/sh
+cd "${0%/*}" || exit
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions
+
+for i in 10 50 100 500
+do
+    CASE_DIR="Re_$i"
+    echo "==========================="
+    echo "Running case in $CASE_DIR"
+    echo "==========================="
+
+    if [ ! -d "$CASE_DIR" ]; then
+        echo "Warning: $CASE_DIR does not exist, skipping."
+        continue
+    fi
+
+    cd "$CASE_DIR" || continue
+
+    runApplication blockMesh
+    runApplication checkMesh
+    runApplication icoFoam
+    foamLog log.icoFoam
+    touch lid.foam
+
+    cd ..
+done
+

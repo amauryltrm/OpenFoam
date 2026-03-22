@@ -1,0 +1,50 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+solvers
+{
+    "p.*"
+    {
+        solver          PCG;          // Preconditioned Conjugate Gradient
+        preconditioner  DIC;          // Diagonal incomplete Cholesky
+        tolerance       1e-06;        // Critère de convergence
+        relTol          0.05;            // Tolérance relative
+    }
+
+        "pfinal.*"
+    {
+        $p;
+        relTol          0;            // Tolérance relative
+    }
+
+    "U.*"
+    {
+        solver          smoothSolver;        // Bi-Conjugate Gradient Stabilized
+        smoother        symGaussSeidel;         // Diagonal Incomplete LU
+        tolerance       1e-05;
+        relTol          0;
+    }
+}
+
+PISO
+{
+    nCorrectors 2;
+    nNonOrthogonalCorrectors 0;
+    pRefCell        0;
+    pRefValue       0;
+}
+

@@ -1,0 +1,27 @@
+#!/bin/sh
+cd "${0%/*}" || exit
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions
+
+for i in "Scheme_upwind" "Scheme_limited_linear" "Scheme_linear"
+do
+    CASE_DIR=$i
+    echo "==========================="
+    echo "Running case in $CASE_DIR"
+    echo "==========================="
+
+    if [ ! -d "$CASE_DIR" ]; then
+        echo "Warning: $CASE_DIR does not exist, skipping."
+        continue
+    fi
+
+    cd "$CASE_DIR" || continue
+
+    runApplication blockMesh
+    runApplication checkMesh
+    runApplication icoFoam
+    foamLog log.icoFoam
+    touch lid.foam
+
+    cd ..
+done
+
